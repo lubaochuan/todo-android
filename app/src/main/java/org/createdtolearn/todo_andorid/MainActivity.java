@@ -3,6 +3,7 @@ package org.createdtolearn.todo_andorid;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         lvItems.setAdapter(itemsAdapter);
         items.add("First Item");
         items.add("Second Item");
+        setupListViewListener();
     }
 
     public void onAddItem(View v) {
@@ -33,5 +35,21 @@ public class MainActivity extends AppCompatActivity {
         String itemText = etNewItem.getText().toString();
         itemsAdapter.add(itemText);
         etNewItem.setText("");
+    }
+
+    private void setupListViewListener() {
+        lvItems.setOnItemLongClickListener(
+            new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> adapter,
+                                               View item, int pos, long id) {
+                    // Remove the item within array at position
+                    items.remove(pos);
+                    // Refresh the adapter
+                    itemsAdapter.notifyDataSetChanged();
+                    // Return true consumes the long click event (marks it handled)
+                    return true;
+                }
+            });
     }
 }
